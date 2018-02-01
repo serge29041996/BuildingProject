@@ -1,4 +1,4 @@
-package com.BuildingProject.Commons;
+package com.buildingproject.commons;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +22,7 @@ public class Building {
      */
     private String address;
 
-    protected Building() {
+    public Building() {
 
     }
 
