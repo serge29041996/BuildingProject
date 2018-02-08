@@ -1,55 +1,54 @@
 import com.buildingproject.commons.Building;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
+import com.buildingproject.dao.BuildingRepository;
 
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@Transactional
+@SpringBootApplication
 public class BuildingTest {
-    @Autowired
-    private SessionFactory sessionFactory;
-    private Session currentSession;
+    private static final Logger log = LoggerFactory.getLogger(BuildingTest.class);
 
-    @Before
-    public void openSession() {
-        currentSession = sessionFactory.getCurrentSession();
+    public static void main(String[] args) {
+        SpringApplication.run(BuildingTest.class);
     }
 
-    @Test
-    public void shouldHaveASessionFactory() {
-        assertNotNull(sessionFactory);
-    }
+    @Bean
+    public CommandLineRunner demo(BuildingRepository repository) {
+        return (args) -> {
+            // save a couple of building
+            repository.save(new Building("Jack", "12"));
+            repository.save(new Building("Chloe", "13"));
+            repository.save(new Building("Kim", "15"));
+            repository.save(new Building("David", "239"));
+            repository.save(new Building("Michelle", "762"));
 
-    @Test
-    public void shouldHaveNoObjectsAtStart() {
-        List<?> results = currentSession.createQuery("from Building").list();
-        assertTrue(results.isEmpty());
-    }
+            // fetch all building
+            log.info("Customers found with findAll():");
+            log.info("-------------------------------");
+            for (Building customer : repository.findAll()) {
+                log.info(customer.toString());
+            }
+            log.info("");
 
-    @Test
-    public void shouldBeAbleToPersistAnObject() {
-        assertEquals(0, currentSession.createQuery("from Building").list().size());
-        Building building = new Building();
-        building.setName("testBuilding");
-        currentSession.persist(building);
-        currentSession.flush();
-        assertEquals(1, currentSession.createQuery("from Building").list().size());
-    }
+            // fetch an individual building by ID
+            Building customer = repository.findOne(1L);
+            log.info("Building found with findOne(1L):");
+            log.info("--------------------------------");
+            log.info(customer.toString());
+            log.info("");
 
-    @Test
-    public void shouldBeABleToQueryForObjects() {
-        shouldBeAbleToPersistAnObject();
-
-        assertEquals(1, currentSession.createQuery("from Building where name = 'testBuilding'").list().size());
-        assertEquals(0, currentSession.createQuery("from Building where name = 'Baz'").list().size());
+            // fetch customers by last name
+            log.info("Building found with findByLastName('Bauer'):");
+            log.info("--------------------------------------------");
+            for (Building bauer : repository.findByNameBuilding("Bauer")) {
+                log.info(bauer.toString());
+            }
+            log.info("");
+        };
     }
 }

@@ -15,6 +15,10 @@
         <module>Service</module>
     </modules>
 
+    <properties>
+        <org.springframework.boot.version>1.5.9.RELEASE</org.springframework.boot.version>
+    </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -32,12 +36,12 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-jpa</artifactId>
-                <version>1.5.9.RELEASE</version>
+                <version>${org.springframework.boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
-                <version>1.5.9.RELEASE</version>
+                <version>${org.springframework.boot.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -55,27 +59,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-        </dependency>
-        <!--
-        <dependency>
-            <groupId>com.BuildingProject</groupId>
-            <artifactId>Commons</artifactId>
-        </dependency>
-        -->
     </dependencies>
 
     <build>
@@ -108,19 +94,19 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>1.5.9.RELEASE</version>
+                    <version>${org.springframework.boot.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.liquibase</groupId>
                     <artifactId>liquibase-maven-plugin</artifactId>
                     <version>3.4.1</version>
                     <configuration>
-                        <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                        <propertyFile>DAO/src/main/resources/liquibase.properties</propertyFile>
                     </configuration>
                 </plugin>
-
             </plugins>
         </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
