@@ -1,54 +1,35 @@
 import com.buildingproject.commons.Building;
 import com.buildingproject.dao.BuildingRepository;
+import com.buildingproject.dao.BuildingTest1;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootApplication
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@ContextConfiguration(classes={BuildingTest1.class})
 public class BuildingTest {
-    private static final Logger log = LoggerFactory.getLogger(BuildingTest.class);
+    @Autowired
+    private TestEntityManager entityManager;
 
-    public static void main(String[] args) {
-        SpringApplication.run(BuildingTest.class);
-    }
+    @Autowired
+    private BuildingRepository customers;
 
-    @Bean
-    public CommandLineRunner demo(BuildingRepository repository) {
-        return (args) -> {
-            // save a couple of building
-            repository.save(new Building("Jack", "12"));
-            repository.save(new Building("Chloe", "13"));
-            repository.save(new Building("Kim", "15"));
-            repository.save(new Building("David", "239"));
-            repository.save(new Building("Michelle", "762"));
+    @Test
+    public void testFindByLastName() {
+        Building customer = new Building("first", "last");
+        entityManager.persist(customer);
 
-            // fetch all building
-            log.info("Customers found with findAll():");
-            log.info("-------------------------------");
-            for (Building customer : repository.findAll()) {
-                log.info(customer.toString());
-            }
-            log.info("");
+        List<Building> findByLastName = customers.findByNameBuilding(customer.getName());
 
-            // fetch an individual building by ID
-            Building customer = repository.findOne(1L);
-            log.info("Building found with findOne(1L):");
-            log.info("--------------------------------");
-            log.info(customer.toString());
-            log.info("");
-
-            // fetch customers by last name
-            log.info("Building found with findByLastName('Bauer'):");
-            log.info("--------------------------------------------");
-            for (Building bauer : repository.findByNameBuilding("Bauer")) {
-                log.info(bauer.toString());
-            }
-            log.info("");
-        };
+        assertThat(findByLastName).extracting(Building::getName).containsOnly(customer.getName());
     }
 }

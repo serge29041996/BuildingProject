@@ -26,7 +26,7 @@ public class Building {
 
     }
 
-    public Building(String name, String address){
+    public Building(final String name, final String address){
         this.name = name;
         this.address = address;
     }
