@@ -1,21 +1,33 @@
 package com.buildingproject.dao;
 
-import com.buildingproject.commons.Building;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+
+import javax.sql.DataSource;
 
 @SpringBootApplication
-public class BuildingTest1 {
-    private static final Logger log = LoggerFactory.getLogger(BuildingTest1.class);
+@EnableAutoConfiguration
+public class BuildingTest1 implements CommandLineRunner {
+    //private static final Logger log = LoggerFactory.getLogger(BuildingTest1.class);
+
+    @Autowired
+    DataSource dataSource;
 
     public static void main(String[] args) {
-        SpringApplication.run(BuildingTest1.class);
+        SpringApplication.run(BuildingTest1.class, args);
     }
 
+    @Override
+    public void run(String... args) throws Exception {
+
+        System.out.println("DATASOURCE = " + dataSource);
+
+    }
+
+    /*
     @Bean
     public CommandLineRunner demo(BuildingRepository repository) {
         return (args) -> {
@@ -49,5 +61,5 @@ public class BuildingTest1 {
             }
             log.info("");
         };
-    }
+    } */
 }

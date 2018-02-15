@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -17,19 +16,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ContextConfiguration(classes={BuildingTest1.class})
 public class BuildingTest {
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Autowired
-    private BuildingRepository customers;
+    private BuildingRepository buildingRepository;
 
     @Test
     public void testFindByLastName() {
-        Building customer = new Building("first", "last");
-        entityManager.persist(customer);
+        Building building = new Building("first", "last");
+        buildingRepository.save(building);
 
-        List<Building> findByLastName = customers.findByNameBuilding(customer.getName());
+        List<Building> findByLastName = buildingRepository.findByName(building.getName());
 
-        assertThat(findByLastName).extracting(Building::getName).containsOnly(customer.getName());
+        assertThat(findByLastName).extracting(Building::getName).containsOnly(building.getName());
     }
 }
