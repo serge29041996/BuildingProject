@@ -25,7 +25,7 @@ public class Building {
      */
     private String address;
 
-    protected Building() {
+    public Building() {
 
     }
 

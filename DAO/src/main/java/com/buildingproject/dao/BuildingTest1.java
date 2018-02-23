@@ -1,15 +1,17 @@
 package com.buildingproject.dao;
 
+import com.buildingproject.commons.Building;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import javax.sql.DataSource;
 
 @SpringBootApplication
-@EnableAutoConfiguration
+@EntityScan(basePackageClasses=Building.class)              ///what need for the finding entity
 public class BuildingTest1 implements CommandLineRunner {
     //private static final Logger log = LoggerFactory.getLogger(BuildingTest1.class);
 
