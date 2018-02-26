@@ -3,26 +3,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet id="02" author="serge29041996">
-        <insert tableName="Building">
-            <column name="id" valueNumeric="1"/>
-            <column name="name" value="building_01"/>
-            <column name="address" value="address_01"/>
-        </insert>
-        <insert tableName="Building">
-            <column name="id" valueNumeric="2"/>
-            <column name="name" value="building_02"/>
-            <column name="address" value="address_02"/>
-        </insert>
-        <insert tableName="Building">
-            <column name="id" valueNumeric="3"/>
-            <column name="name" value="building_03"/>
-            <column name="address" value="address_03"/>
-        </insert>
-        <insert tableName="Building">
-            <column name="id" valueNumeric="4"/>
-            <column name="name" value="building_04"/>
-            <column name="address" value="address_04"/>
-        </insert>
+    <changeSet id="02" author="serge29041996" context="test">
+        <loadData tableName="Building" file="db/test-data.csv">
+            <column header="id" name="id" type="numeric"/>
+            <column header="name" name="name" type="string"/>
+            <column header="address" name="address" type="string"/>
+        </loadData>
     </changeSet>
 </databaseChangeLog>
