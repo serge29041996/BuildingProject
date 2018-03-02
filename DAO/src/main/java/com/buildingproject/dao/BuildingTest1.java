@@ -4,30 +4,29 @@ import com.buildingproject.commons.Building;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import javax.sql.DataSource;
 
 @SpringBootApplication
-@EntityScan(basePackageClasses=Building.class)              ///what need for the finding entity
+@EntityScan(basePackageClasses = Building.class)              ///what need for the finding entity
 public class BuildingTest1 implements CommandLineRunner {
-    //private static final Logger log = LoggerFactory.getLogger(BuildingTest1.class);
+  //private static final Logger log = LoggerFactory.getLogger(BuildingTest1.class);
 
-    @Autowired
-    DataSource dataSource;
+  @Autowired
+  DataSource dataSource;
 
-    public static void main(String[] args) {
-        SpringApplication.run(BuildingTest1.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(BuildingTest1.class, args);
+  }
 
-    @Override
-    public void run(String... args) throws Exception {
+  @Override
+  public void run(String... args) throws Exception {
 
-        System.out.println("DATASOURCE = " + dataSource);
+    System.out.println("DATASOURCE = " + dataSource);
 
-    }
+  }
 
     /*
     @Bean

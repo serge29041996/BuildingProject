@@ -11,4 +11,11 @@
     <packaging>jar</packaging>
 
     <artifactId>Service</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.BuildingProject</groupId>
+            <artifactId>DAO</artifactId>
+        </dependency>
+    </dependencies>
 </project>

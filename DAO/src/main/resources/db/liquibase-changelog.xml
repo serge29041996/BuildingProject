@@ -6,4 +6,5 @@
     <include file="changelog/01-create-building-schema.xml" relativeToChangelogFile="true"/>
     <include file="changelog/02-insert-data-buildings.xml" relativeToChangelogFile="true"/>
     <include file="changelog/03-delete-building.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/04-add-autoincrement.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
