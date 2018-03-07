@@ -13,6 +13,7 @@
         <module>DAO</module>
         <module>REST</module>
         <module>Service</module>
+        <module>Main</module>
     </modules>
 
     <properties>
@@ -146,6 +147,7 @@
                         </execution>
                     </executions>
                 </plugin>
+
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>

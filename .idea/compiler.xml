@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Commons" />
         <module name="DAO" />
+        <module name="Main" />
         <module name="REST" />
         <module name="Service" />
       </profile>
@@ -15,6 +16,7 @@
     <bytecodeTargetLevel>
       <module name="Commons" target="1.8" />
       <module name="DAO" target="1.8" />
+      <module name="Main" target="1.8" />
       <module name="NewProject" target="1.8" />
       <module name="REST" target="1.8" />
       <module name="Service" target="1.8" />

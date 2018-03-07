@@ -45,17 +45,22 @@ public class BuildingTest {
 
   @Test
   public void testDeleteByID() {
-    buildingRepository.delete(100L);
+    Building building = new Building("third", "third");
+    building = buildingRepository.save(building);
+    long idBuilding = building.getId();
+    buildingRepository.delete(idBuilding);
 
-    Building findByID = buildingRepository.findOne(100L);
+    Building findByID = buildingRepository.findOne(idBuilding);
     assertThat(findByID).isNull();
   }
 
   @Test
   public void testCountEntity() {
+
     long countEntity = buildingRepository.count();
 
     assertThat(countEntity).isEqualTo(5);
   }
 
+  //добавить AfterTest (AfterAll) для очистки БД
 }
