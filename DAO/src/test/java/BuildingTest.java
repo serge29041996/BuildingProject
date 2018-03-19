@@ -1,11 +1,13 @@
 import com.buildingproject.commons.Building;
 import com.buildingproject.dao.BuildingRepository;
-import com.buildingproject.dao.BuildingTest1;
+import com.buildingproject.dao.DaoSpringClass;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -14,23 +16,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = {BuildingTest1.class})
-/*
-@DataJpaTest
-*/
+@ContextConfiguration(classes = {DaoSpringClass.class})
+@TestPropertySource(
+    locations = "classpath:test.properties")
 public class BuildingTest {
 
   @Autowired
   private BuildingRepository buildingRepository;
 
   @Test
-  public void testFindByLastName() {
+  public void testFindByName() {
     Building building = new Building("first", "last");
     buildingRepository.save(building);
 
-    List<Building> findByLastName = buildingRepository.findByName(building.getName());
+    Building findByName = buildingRepository.findByName(building.getName());
 
-    assertThat(findByLastName).extracting(Building::getName).containsOnly(building.getName());
+    assertThat(findByName).isEqualTo(building);
   }
 
   @Test
@@ -57,10 +58,15 @@ public class BuildingTest {
   @Test
   public void testCountEntity() {
 
+    Building building = new Building("fourth", "fourth");
+    building = buildingRepository.save(building);
     long countEntity = buildingRepository.count();
 
-    assertThat(countEntity).isEqualTo(5);
+    assertThat(countEntity).isEqualTo(1);
   }
 
-  //добавить AfterTest (AfterAll) для очистки БД
+  @After
+  public void deleteAllBuilding() {
+    buildingRepository.deleteAll();
+  }
 }

@@ -1,5 +1,7 @@
 package com.buildingproject.commons;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,16 +15,19 @@ public class Building {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @ApiModelProperty(notes = "The database generated building ID")
   private long id;
   /**
    * 15.02.2018
    * Name of the building
    */
+  @ApiModelProperty(notes = "The building name")
   private String name;
   /**
    * 15.02.2018
    * Address of the building
    */
+  @ApiModelProperty(notes = "The building address")
   private String address;
 
   public Building() {
