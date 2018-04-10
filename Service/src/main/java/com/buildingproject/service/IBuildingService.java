@@ -17,9 +17,15 @@ public interface IBuildingService {
 
   Building findByName(String name);
 
+  Building findByAddress(String address);
+
   boolean isBuildingExist(Building building);
 
   void updateBuilding(Building building);
 
   void deleteBuildingById(long id);
+
+  Building findByNameAndAddress(String name, String address);
+
+  String validateDataBuilding(Building building);
 }

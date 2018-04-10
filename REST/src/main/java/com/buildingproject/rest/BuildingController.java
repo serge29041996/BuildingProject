@@ -32,6 +32,7 @@ public class BuildingController {
       @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
   })
   @GetMapping("/buildings")
+  @CrossOrigin(origins = "http://localhost:4200")
   public List<Building> getAllBuildings() {
     return buildingService.findAll();
   }
@@ -51,15 +52,21 @@ public class BuildingController {
 
   @ApiOperation(value = "Add a building")
   @PostMapping("/building")
+  @CrossOrigin(origins = "http://localhost:4200")
   public ResponseEntity<?> createUser(@RequestBody Building building, UriComponentsBuilder ucBuilder) {
     logger.info("Creating Building : {}", building);
 
-    if (buildingService.isBuildingExist(building)) {
-      logger.error("Unable to create. A User with id {} already exist", building.getName());
-      return new ResponseEntity("Unable to create. A User with id " +
-          building.getName() + " already exist.",HttpStatus.CONFLICT);
+    String resultValidation = buildingService.validateDataBuilding(building);
+    if (!resultValidation.isEmpty()) {
+      return new ResponseEntity(resultValidation,HttpStatus.CONFLICT);
     }
-    buildingService.saveBuilding(building);
+    else if (buildingService.isBuildingExist(building)) {
+      logger.error("Unable to create. A Building with name {} already exist", building.getName());
+      return new ResponseEntity("Unable to create. A Building with name " +
+          building.getName() + " and address " + building.getAddress() + " already exist.",HttpStatus.CONFLICT);
+    }
+
+    building = buildingService.saveBuilding(building);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setLocation(ucBuilder.path("building/{id}").buildAndExpand(building.getId()).toUri());
@@ -69,18 +76,25 @@ public class BuildingController {
   @ApiOperation(value = "Update building with an ID")
   @PutMapping("/building/{id}")
   public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody Building building) {
-    logger.info("Updating User with id {}", id);
+    logger.info("Updating Building with id {}", id);
 
     Building currentBuilding = buildingService.findById(id);
 
     if (currentBuilding == null) {
-      logger.error("Unable to update. User with id {} not found.", id);
-      return new ResponseEntity("Unable to upate. User with id " + id + " not found.",
+      logger.error("Unable to update. Building with id {} not found.", id);
+      return new ResponseEntity("Unable to update. Building with id " + id + " not found.",
           HttpStatus.NOT_FOUND);
+    }
+
+    String resultValidation = buildingService.validateDataBuilding(building);
+    if (!resultValidation.isEmpty()) {
+      return new ResponseEntity(resultValidation,HttpStatus.CONFLICT);
     }
 
     currentBuilding.setName(building.getName());
     currentBuilding.setAddress(building.getAddress());
+    currentBuilding.setNumberUnits(building.getNumberUnits());
+    currentBuilding.setNumberResidents(building.getNumberResidents());
 
     buildingService.updateBuilding(currentBuilding);
     return new ResponseEntity<Building>(currentBuilding, HttpStatus.OK);
@@ -88,13 +102,14 @@ public class BuildingController {
 
   @ApiOperation(value = "Delete building with an ID")
   @DeleteMapping("/building/{id}")
+  @CrossOrigin(origins = "http://localhost:4200")
   public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
     logger.info("Fetching & Deleting User with id {}", id);
 
     Building user = buildingService.findById(id);
     if (user == null) {
-      logger.error("Unable to delete. User with id {} not found.", id);
-      return new ResponseEntity("Unable to delete. User with id " + id + " not found.",
+      logger.error("Unable to delete. Building with id {} not found.", id);
+      return new ResponseEntity("Unable to delete. Building with id " + id + " not found.",
           HttpStatus.NOT_FOUND);
     }
     buildingService.deleteBuildingById(id);

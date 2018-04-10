@@ -11,6 +11,7 @@
         <module name="Main" />
         <module name="REST" />
         <module name="Service" />
+        <module name="Web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,6 +21,7 @@
       <module name="NewProject" target="1.8" />
       <module name="REST" target="1.8" />
       <module name="Service" target="1.8" />
+      <module name="Web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

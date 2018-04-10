@@ -2,6 +2,7 @@ import com.buildingproject.commons.Building;
 import com.buildingproject.dao.BuildingRepository;
 import com.buildingproject.dao.DaoSpringClass;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import javax.validation.*;
+
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,9 +27,17 @@ public class BuildingTest {
   @Autowired
   private BuildingRepository buildingRepository;
 
+  private Validator validator;
+
+  @Before
+  public void setup() {
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+  }
+
   @Test
   public void testFindByName() {
-    Building building = new Building("first", "last");
+    Building building = new Building("first", "last", 1, 1);
     buildingRepository.save(building);
 
     Building findByName = buildingRepository.findByName(building.getName());
@@ -36,7 +47,7 @@ public class BuildingTest {
 
   @Test
   public void testFindByID() {
-    Building building = new Building("second", "second");
+    Building building = new Building("second", "second", 1, 1);
     buildingRepository.save(building);
 
     Building findByID = buildingRepository.findOne(101L);
@@ -46,7 +57,7 @@ public class BuildingTest {
 
   @Test
   public void testDeleteByID() {
-    Building building = new Building("third", "third");
+    Building building = new Building("third", "third", 3, 3);
     building = buildingRepository.save(building);
     long idBuilding = building.getId();
     buildingRepository.delete(idBuilding);
@@ -57,12 +68,23 @@ public class BuildingTest {
 
   @Test
   public void testCountEntity() {
-
-    Building building = new Building("fourth", "fourth");
-    building = buildingRepository.save(building);
+    Building building = new Building("fourth", "fourth", 4, 4);
+    buildingRepository.save(building);
     long countEntity = buildingRepository.count();
 
     assertThat(countEntity).isEqualTo(1);
+  }
+
+  @Test
+  public void testWrongName() {
+    Building building = new Building(null, "fifth", 5, 5);
+    Set<ConstraintViolation<Building>> violations = validator.validate(building);
+    StringBuilder errorMessage = new StringBuilder("");
+    for(ConstraintViolation<Building> violation : violations){
+      errorMessage.append(violation.getMessage());
+      errorMessage.append(" ");
+    }
+    assertThat(errorMessage.toString()).isEqualTo("Name of the building cannot be null or whitespace ");
   }
 
   @After

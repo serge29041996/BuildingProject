@@ -1,5 +1,5 @@
-id,name,address
-1,building_01,address_01
-2,building_02,address_02
-3,building_03,address_03
-4,building_04,address_04
+id,name,address,numberUnits,numberResidents
+1,building_01,address_01,1,1
+2,building_02,address_02,2,2
+3,building_03,address_03,3,3
+4,building_04,address_04,4,4

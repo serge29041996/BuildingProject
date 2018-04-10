@@ -16,6 +16,12 @@
             <column name="address" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="numberUnits" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="numberResidents" type="int">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

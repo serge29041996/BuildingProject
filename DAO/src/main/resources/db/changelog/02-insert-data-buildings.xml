@@ -8,6 +8,8 @@
             <column header="id" name="id" type="numeric"/>
             <column header="name" name="name" type="string"/>
             <column header="address" name="address" type="string"/>
+            <column header="numberUnits" name="numberUnits" type="numeric"/>
+            <column header="numberResidents" name="numberResidents" type="numeric"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>
