@@ -2,16 +2,12 @@ package com.buildingproject.commons;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
 
 @Entity
 public class Building {
@@ -58,6 +54,22 @@ public class Building {
   @Column(name = "numberresidents")
   private int numberResidents;
 
+  /**
+   * 23.04.2018
+   * Image of the building
+   */
+  @ApiModelProperty(notes = "Image of the building")
+  @Lob
+  private byte[] image;
+
+  /**
+   * 01.05.2018
+   * Type of the image
+   */
+  @ApiModelProperty(notes = "Type of the image")
+  @Column(name = "typeimage")
+  private String typeImage;
+
   public Building() {
 
   }
@@ -75,6 +87,18 @@ public class Building {
     this.address = address;
     this.numberUnits = numberUnits;
     this.numberResidents = numberResidents;
+  }
+
+  public Building(final String name, final String address, final int numberUnits, final int numberResidents,
+                  final byte[] image){
+    this(name,address,numberUnits,numberResidents);
+    this.image = image;
+  }
+
+  public Building(final String name, final String address, final int numberUnits, final int numberResidents,
+                  final byte[] image, final String typeImage){
+    this(name,address,numberUnits,numberResidents,image);
+    this.typeImage = typeImage;
   }
 
   public long getId() {
@@ -117,6 +141,22 @@ public class Building {
     this.numberResidents = numberResidents;
   }
 
+  public byte[] getImage() {
+    return image;
+  }
+
+  public void setImage(byte[] image) {
+    this.image = image;
+  }
+
+  public String getTypeImage() {
+    return typeImage;
+  }
+
+  public void setTypeImage(String typeImage) {
+    this.typeImage = typeImage;
+  }
+
   @Override
   public boolean equals(Object object) {
     if (this == object) {
@@ -147,6 +187,26 @@ public class Building {
       }
     }
 
+    if (isEqual) {
+      if(image == null && building.image == null) {
+        isEqual = true;
+      } else if (image == null || building.image == null) {
+        isEqual = false;
+      } else {
+        isEqual = Arrays.equals(image, building.image);
+      }
+    }
+
+    if (isEqual) {
+      if(typeImage == null && building.typeImage == null) {
+        isEqual = true;
+      } else if (typeImage == null || building.typeImage == null) {
+        isEqual = false;
+      } else {
+        isEqual = typeImage.equals(building.typeImage);
+      }
+    }
+
     return isEqual && numberResidents == building.numberResidents
         && numberUnits == building.numberUnits;
   }
@@ -158,6 +218,8 @@ public class Building {
     result = 31 * result + (address == null ? 0 : address.hashCode());
     result = 31 * result + numberUnits;
     result = 31 * result + numberResidents;
+    result = 31 * result + (image == null ? 0 : Arrays.hashCode(image));
+    result = 31 * result + (typeImage == null ? 0 : typeImage.hashCode());
     return result;
   }
 

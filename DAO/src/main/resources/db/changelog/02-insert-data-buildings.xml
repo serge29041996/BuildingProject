@@ -10,6 +10,7 @@
             <column header="address" name="address" type="string"/>
             <column header="numberUnits" name="numberUnits" type="numeric"/>
             <column header="numberResidents" name="numberResidents" type="numeric"/>
+            <column header="image" name="image" type="blob"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>

@@ -1,0 +1,62 @@
+<div class="container-fluid">
+  <div class="row rowHead">
+    <div class="col-md-10">
+        <h4 class="text-md-left">Buildings</h4>
+    </div>
+    <div class="col-md-2" style="padding-left: 46px">
+        <button class="btn btn-primary" (click)="onAddBuilding()">+Add Building</button>
+    </div>
+  </div>
+</div>
+<div class="container-fluid container-table">
+  <div class="col-md-12">
+      <table class="table">
+          <tr class="borderTable">
+            <td style="width: 15%">Building name</td>
+            <td style="width: 25%; padding-left: 5%">Address</td>
+            <td style="width: 15%"># of Units</td>
+            <td style="width: 15%"># of Residents</td>
+            <td style="width: 20%">Image</td>
+            <td style="width: 10%"></td>
+          </tr>
+          <tr class="borderTable" *ngFor="let building of buildings">
+            <td
+              class="clickable"
+              style="width: 10%"
+              [routerLink]="['/building', 'update', building.id]">{{building.name}}</td>
+            <td
+              class="clickable"
+              style="width: 40%; padding-left: 5%"
+              [routerLink]="['/building', 'update', building.id]">{{building.address}}</td>
+            <td
+              class="clickable"
+              style="width: 15%"
+              [routerLink]="['/building', 'update', building.id]">{{building.numberUnits}}</td>
+            <td
+              class="clickable"
+              style="width: 15%"
+              [routerLink]="['/building', 'update', building.id]">{{building.numberResidents}}</td>
+            <td
+              class="clickable"
+              style="width: 18%"
+              [routerLink]="['/building', 'update', building.id]">
+              <img
+                class="image-table"
+                *ngIf="building.image !== null; else noImage"
+                [src]=" building.typeImage +', '+ building.image | safeHtml"
+                alt="pictureBuilding" width="100px" height="100px"/>
+              <ng-template #noImage>No image</ng-template>
+            </td>
+            <td style="width: 2%">
+
+              <input
+                type="image"
+                src="../../assets/image-delete.jpg"
+                alt="Delete"
+                style="width: 20px"
+                (click)="deleteBuilding(building)"/>
+            </td>
+          </tr>
+      </table>
+  </div>
+</div>

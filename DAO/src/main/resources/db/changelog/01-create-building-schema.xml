@@ -22,6 +22,9 @@
             <column name="numberResidents" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="image" type="blob">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

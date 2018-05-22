@@ -21,11 +21,9 @@ public interface IBuildingService {
 
   boolean isBuildingExist(Building building);
 
-  void updateBuilding(Building building);
+  void updateBuilding(Building newBuilding, Building oldBuilding);
 
   void deleteBuildingById(long id);
 
   Building findByNameAndAddress(String name, String address);
-
-  String validateDataBuilding(Building building);
 }

@@ -1,0 +1,88 @@
+<div class="container-fluid">
+  <div *ngIf="(isValidId && typePage === 'update') || (typePage === ''); else noBuilding">
+    <div class="row block-message">
+      <div class="col-md-6 offset-md-3 message">
+        <p *ngIf="errors[4].message !== ''" class="message" [ngClass]="[styleForMessage]">{{ errors[4].message }}</p>
+        <p *ngIf="resultMessage !== ''" class="message" [ngClass]="[styleForMessage]">{{ resultMessage }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h4
+          class="top-message"
+          *ngIf="typePage === ''">Enter all needed information about building</h4>
+        <h4
+          class="top-message"
+          *ngIf="typePage === 'update'">Change needed information about building</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <form (ngSubmit)="addBuilding()" #f="ngForm">
+          <div class="form-group row">
+            <label class="col-md-2 col-form-label" for="name">Building name:</label>
+            <div class="col-md-10">
+              <input class="form-control" id="name" type="text" name="name" [(ngModel)]="name"/>
+              <div class="invalid-feedback" style="display: block;">
+                {{ errors[0].message }}
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 col-form-label" for="address">Address of building:</label>
+            <div class="col-md-10">
+              <input class="form-control" id="address" type="text" name="address" [(ngModel)]="address"/>
+              <div class="invalid-feedback" style="display: block;">
+                {{ errors[1].message }}
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 col-form-label" for="numberUnits">Number of units in the building:</label>
+            <div class="col-md-10">
+              <input class="form-control" id="numberUnits" type="text" name="numberUnits" [(ngModel)]="numberUnits"/>
+              <div class="invalid-feedback" style="display: block;">
+                {{ errors[2].message }}
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 col-form-label" for="numberResidents">Number of residents in the building:</label>
+            <div class="col-md-10">
+              <input class="form-control" id="numberResidents" type="text" name="numberResidents" [(ngModel)]="numberResidents"/>
+              <div class="invalid-feedback" style="display: block;">
+                {{ errors[3].message }}
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 col-form-label" for="imageBuilding">Image of the building:</label>
+            <div class="col-md-10">
+              <input id="imageBuilding" type="file" name="imageBuilding" ngModel (change)="addImage($event)"
+                     accept="image/*" class="form-control-file"/>
+            </div>
+          </div>
+          <div class="row" *ngIf="typePage === 'update'">
+            <div class="col-md-2">
+              <p>Previous image:</p>
+            </div>
+            <div class="col-md-10">
+              <img *ngIf="oldImage !== null; else noImage" [src]=" oldTypeImage +', '+ oldImage | safeHtml" alt="pictureBuilding" width="200px" height="200px"/>
+              <ng-template #noImage>No image</ng-template>
+            </div>
+          </div>
+          <div class="row">
+            <button type="button" class="btn btn-primary" (click)="onBackList()" style="margin-left: 10px; margin-right: 10px">Back To List</button>
+            <button type="submit" class="btn btn-success" *ngIf="typePage === ''">Create Building</button>
+            <button type="submit" class="btn btn-success" *ngIf="typePage === 'update'">Update Building</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <ng-template #noBuilding>
+    <h4 class="top-message">Building with such id is not exist</h4>
+  </ng-template>
+</div>
+

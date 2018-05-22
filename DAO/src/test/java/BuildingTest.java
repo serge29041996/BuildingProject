@@ -2,7 +2,6 @@ import com.buildingproject.commons.Building;
 import com.buildingproject.dao.BuildingRepository;
 import com.buildingproject.dao.DaoSpringClass;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.validation.*;
-
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,14 +21,6 @@ public class BuildingTest {
 
   @Autowired
   private BuildingRepository buildingRepository;
-
-  private Validator validator;
-
-  @Before
-  public void setup() {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    validator = factory.getValidator();
-  }
 
   @Test
   public void testFindByName() {
@@ -73,18 +60,6 @@ public class BuildingTest {
     long countEntity = buildingRepository.count();
 
     assertThat(countEntity).isEqualTo(1);
-  }
-
-  @Test
-  public void testWrongName() {
-    Building building = new Building(null, "fifth", 5, 5);
-    Set<ConstraintViolation<Building>> violations = validator.validate(building);
-    StringBuilder errorMessage = new StringBuilder("");
-    for(ConstraintViolation<Building> violation : violations){
-      errorMessage.append(violation.getMessage());
-      errorMessage.append(" ");
-    }
-    assertThat(errorMessage.toString()).isEqualTo("Name of the building cannot be null or whitespace ");
   }
 
   @After

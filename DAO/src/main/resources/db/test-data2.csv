@@ -1,0 +1,5 @@
+id,name,address,numberUnits,numberResidents,image,typeImage
+1,building_01,address_01,1,1,null,null
+2,building_02,address_02,2,2,null,null
+3,building_03,address_03,3,3,null,null
+4,building_04,address_04,4,4,null,null

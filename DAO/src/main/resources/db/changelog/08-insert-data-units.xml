@@ -1,0 +1,17 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="08" author="serge29041996" context="test">
+        <loadData tableName="Unit" file="db/test-data-units.csv">
+            <column header="id" name="id" type="numeric"/>
+            <column header="number" name="number" type="numeric"/>
+            <column header="numberBedrooms" name="numberBedrooms" type="numeric"/>
+            <column header="areaApartment" name="areaApartment" type="numeric"/>
+            <column header="availabilityFurniture" name="availabilityFurniture" type="boolean"/>
+            <column header="containAnimals" name="containAnimals" type="boolean"/>
+            <column header="idBuilding" name="idBuilding" type="numeric"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

@@ -1,29 +1,31 @@
 import com.buildingproject.commons.Building;
-import com.buildingproject.service.IBuildingService;
+import com.buildingproject.rest.ApiError;
+import com.buildingproject.rest.ApiValidationError;
 import com.buildingproject.rest.RestSpringClass;
+import com.buildingproject.service.IBuildingService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.FileReader;
+import java.util.Base64;
+import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.test.web.servlet.MvcResult;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -104,7 +106,7 @@ public class RestTest {
         post("/building")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(building)))
-        .andExpect(status().isConflict());
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -159,12 +161,13 @@ public class RestTest {
         post("/building")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(building)))
-        .andExpect(status().isConflict())
+        .andExpect(status().isBadRequest())
         .andReturn();
 
     String requestBody = mvcResult.getResponse().getContentAsString();
-    assertThat(requestBody).isEqualTo(
-        String.format("Unable to create. A Building with name %s and address %s already exist.",
+    String message = asJavaObjectApiError(requestBody).getMessage();
+    assertThat(message).isEqualTo(
+        String.format("Unable to create building. A Building with name %s and address %s already exist.",
             building.getName(), building.getAddress()));
   }
 
@@ -178,14 +181,18 @@ public class RestTest {
             post("/building")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(building)))
-            .andExpect(status().isConflict())
+            .andExpect(status().isBadRequest())
             .andReturn();
 
     String requestBody = mvcResult.getResponse().getContentAsString();
-
-    assertThat(requestBody).isEqualTo(
-        "Number of residents must be greater than 0 or equal 0."
-            + "Number of the units must be greater than 0 or equal 0.");
+    ApiError apiError = asJavaObjectApiError(requestBody);
+    StringBuilder messages = new StringBuilder("");
+    for(ApiValidationError error: apiError.getSubErrors()){
+      messages.append(error.getMessage());
+      messages.append(".");
+    }
+    assertThat("Number of the units must be greater than 0 or equal 0.").isSubstringOf(messages.toString());
+    assertThat("Number of residents must be greater than 0 or equal 0.").isSubstringOf(messages.toString());
   }
 
   @Test
@@ -202,13 +209,48 @@ public class RestTest {
         put("/building/{id}", building.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(building)))
-        .andExpect(status().isConflict())
+        .andExpect(status().isBadRequest())
         .andReturn();
 
     String requestBody = mvcResult.getResponse().getContentAsString();
+    String message = asJavaObjectApiError(requestBody).getSubErrors().get(0).getMessage();
+    assertThat(message).isEqualTo(
+        "Name of the building cannot be null or whitespace");
+  }
 
-    assertThat(requestBody).isEqualTo(
-        "Name of the building cannot be null or whitespace.");
+  @Test
+  public void testWritingDataWithBlobObject() throws Exception {
+    FileReader fr = new FileReader("src/test/resources/base64String.txt");
+    Scanner scanner = new Scanner(fr);
+
+    String base64ImageInfo = scanner.nextLine();
+
+    scanner.close();
+    fr.close();
+
+    byte[] decodedString = Base64.getDecoder().decode(base64ImageInfo);
+
+    Building building = new Building("building_name", "building_address", 1,
+        1, decodedString);
+
+    MvcResult mvcResult =
+        mvc.perform(
+            post("/building")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(building)))
+            .andExpect(status().isCreated())
+            .andExpect(header().string("location", containsString("http://localhost/building/")))
+            .andReturn();
+
+    long id = Long.parseLong(mvcResult.getResponse().getRedirectedUrl().split("/")[4]);
+
+    mvc.perform(
+        get("/building/{id}",id)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().
+            contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("image", is(base64ImageInfo)));
   }
 
   private void createBuilding(String name) {
@@ -220,6 +262,15 @@ public class RestTest {
     try {
       final ObjectMapper mapper = new ObjectMapper();
       return mapper.writeValueAsString(obj);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static ApiError asJavaObjectApiError(final String JSONResponse){
+    try {
+      final ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(JSONResponse,ApiError.class);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

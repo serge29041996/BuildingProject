@@ -7,4 +7,8 @@
     <include file="changelog/02-insert-data-buildings.xml" relativeToChangelogFile="true"/>
     <include file="changelog/03-delete-building.xml" relativeToChangelogFile="true"/>
     <include file="changelog/04-add-autoincrement.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/05-add-typeimage-column.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/06-insert-typeimage.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/07-create-unit-schema.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/08-insert-data-units.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

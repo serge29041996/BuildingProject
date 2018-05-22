@@ -1,0 +1,34 @@
+/*
+.error-message{
+  color: red;
+}
+
+.success-message{
+  color: green;
+  font-style: inherit;
+}
+*/
+
+h4.top-message {
+  padding: 15px;
+}
+
+p.message {
+  margin-top: 10px;
+  background: center yellow;
+  text-align: center;
+  border: 1px solid black;
+  display: none;
+}
+
+div.block-message {
+  max-height: 1px;
+}
+
+div.message {
+  z-index: 100;
+}
+
+p.output-message {
+  display: block;
+}

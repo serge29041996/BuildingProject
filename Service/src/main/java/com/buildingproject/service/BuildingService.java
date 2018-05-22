@@ -5,22 +5,17 @@ import com.buildingproject.dao.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class BuildingService implements IBuildingService {
+
   @Autowired
   private BuildingRepository buildingRepository;
 
   @Override
   public List<Building> findAll() {
-    List<Building> buildings = (List<Building>) buildingRepository.findAll();
-    return buildings;
+    return buildingRepository.findAll();
   }
 
   @Override
@@ -64,33 +59,14 @@ public class BuildingService implements IBuildingService {
   }
 
   @Override
-  public String validateDataBuilding(Building building) {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    Validator validator = factory.getValidator();
-    Set<ConstraintViolation<Building>> violations = validator.validate(building);
-    if (violations.size() == 0) {
-      return "";
-    }
-    else {
-      StringBuilder errorMessage = new StringBuilder("");
-      for(ConstraintViolation<Building> violation : violations){
-        errorMessage.append(violation.getMessage());
-        errorMessage.append(".");
-      }
-      return errorMessage.toString();
-    }
-  }
-
-  @Override
-  public void updateBuilding(Building building) {
-    Building needUpdateBuilding = findById(building.getId());
-    if (needUpdateBuilding != null) {
-      needUpdateBuilding.setName(building.getName());
-      needUpdateBuilding.setAddress(building.getAddress());
-      needUpdateBuilding.setNumberUnits(building.getNumberUnits());
-      needUpdateBuilding.setNumberResidents(building.getNumberResidents());
-      buildingRepository.flush();
-    }
+  public void updateBuilding(Building newBuilding, Building oldBuilding) {
+    oldBuilding.setName(newBuilding.getName());
+    oldBuilding.setAddress(newBuilding.getAddress());
+    oldBuilding.setNumberUnits(newBuilding.getNumberUnits());
+    oldBuilding.setNumberResidents(newBuilding.getNumberResidents());
+    oldBuilding.setImage(newBuilding.getImage());
+    oldBuilding.setTypeImage(newBuilding.getTypeImage());
+    buildingRepository.flush();
   }
 
   @Override
