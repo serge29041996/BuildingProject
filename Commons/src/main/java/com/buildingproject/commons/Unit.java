@@ -2,13 +2,17 @@ package com.buildingproject.commons;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
 @Entity
 @Data
+@ToString(exclude = "id")
+@EqualsAndHashCode(exclude = "id")
 @NoArgsConstructor
 public class Unit {
   /**
@@ -54,18 +58,26 @@ public class Unit {
   @Column(name = "animalsallowed")
   private boolean animalsAllowed;
 
+  /*
   @ApiModelProperty(notes = "Id of the building, where locate unit")
   @Positive(message = "Unit must be located in the building")
   @Column(name = "idbuilding")
   private long idBuilding;
+  */
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name="idbuilding")
+  @ApiModelProperty(notes = "Building, where locate unit")
+  private Building building;
+
 
   public Unit(int number, int numberBedrooms, int areaApartment,
-              boolean furnitureAvailable, boolean animalsAllowed, long idBuilding) {
+              boolean furnitureAvailable, boolean animalsAllowed, Building building) {
     this.number = number;
     this.numberBedrooms = numberBedrooms;
     this.areaApartment = areaApartment;
     this.furnitureAvailable = furnitureAvailable;
     this.animalsAllowed = animalsAllowed;
-    this.idBuilding = idBuilding;
+    this.building = building;
   }
 }

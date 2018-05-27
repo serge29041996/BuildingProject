@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
+import java.util.List;
 
 @Entity
 public class Building {
@@ -70,6 +71,10 @@ public class Building {
   @Column(name = "typeimage")
   private String typeImage;
 
+  @ApiModelProperty(notes = "All units of the building")
+  @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private List<Unit> units;
+
   public Building() {
 
   }
@@ -78,26 +83,24 @@ public class Building {
    * Create Building
    * @param name name of the building
    * @param address address of the building
-   * @param numberUnits number units
    * @param numberResidents number residents
    */
-  public Building(final String name, final String address,
-                  final int numberUnits, final int numberResidents) {
+  public Building(final String name, final String address, final int numberResidents) {
     this.name = name;
     this.address = address;
     this.numberUnits = numberUnits;
     this.numberResidents = numberResidents;
   }
 
-  public Building(final String name, final String address, final int numberUnits, final int numberResidents,
+  public Building(final String name, final String address, final int numberResidents,
                   final byte[] image){
-    this(name,address,numberUnits,numberResidents);
+    this(name,address,numberResidents);
     this.image = image;
   }
 
-  public Building(final String name, final String address, final int numberUnits, final int numberResidents,
+  public Building(final String name, final String address, final int numberResidents,
                   final byte[] image, final String typeImage){
-    this(name,address,numberUnits,numberResidents,image);
+    this(name,address,numberResidents,image);
     this.typeImage = typeImage;
   }
 
@@ -157,6 +160,14 @@ public class Building {
     this.typeImage = typeImage;
   }
 
+  public List<Unit> getUnits() {
+    return units;
+  }
+
+  public void setUnits(List<Unit> units) {
+    this.units = units;
+  }
+
   @Override
   public boolean equals(Object object) {
     if (this == object) {
@@ -207,6 +218,16 @@ public class Building {
       }
     }
 
+    if (isEqual) {
+      if(units == null && building.units == null) {
+        isEqual = true;
+      } else if (units == null || building.units == null) {
+        isEqual = false;
+      } else {
+        isEqual = units.equals(building.units);
+      }
+    }
+
     return isEqual && numberResidents == building.numberResidents
         && numberUnits == building.numberUnits;
   }
@@ -220,6 +241,7 @@ public class Building {
     result = 31 * result + numberResidents;
     result = 31 * result + (image == null ? 0 : Arrays.hashCode(image));
     result = 31 * result + (typeImage == null ? 0 : typeImage.hashCode());
+    result = 31 * result + (units == null ? 0 : units.hashCode());
     return result;
   }
 

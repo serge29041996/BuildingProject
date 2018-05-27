@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(
     locations = "classpath:application-integrationtest.properties")
 @AutoConfigureTestDatabase
-public class RestTest {
+public class RestBuildingTest {
 
   @Autowired
   private MockMvc mvc;
@@ -68,7 +68,7 @@ public class RestTest {
 
   @Test
   public void testGetBuilding() throws Exception {
-    Building building = new Building("building_name", "building_address", 1, 1);
+    Building building = new Building("building_name", "building_address", 1);
     Building savedBuilding = buildingService.saveBuilding(building);
 
     mvc.perform(get("/building/{id}", savedBuilding.getId())
@@ -81,7 +81,7 @@ public class RestTest {
 
   @Test
   public void testPostBuildingCorrectData() throws Exception {
-    Building building = new Building("building_name", "building_address", 1, 1);
+    Building building = new Building("building_name", "building_address", 1);
 
     MvcResult mvcResult =
         mvc.perform(
@@ -101,19 +101,13 @@ public class RestTest {
         .andExpect(content().
             contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("name", is("building_name")));
-
-    mvc.perform(
-        post("/building")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(building)))
-        .andExpect(status().isBadRequest());
   }
 
   @Test
   public void testPutBuilding() throws Exception {
-    Building building = new Building("building_name", "building_address", 1, 1);
+    Building building = new Building("building_name", "building_address", 1);
     Building needBuilding = buildingService.saveBuilding(building);
-    Building newBuilding = new Building("new_building_name", "new_building_address", 2, 2);
+    Building newBuilding = new Building("new_building_name", "new_building_address", 2);
 
     mvc.perform(
         put("/building/{id}", needBuilding.getId())
@@ -132,7 +126,7 @@ public class RestTest {
 
   @Test
   public void testDeleteBuilding() throws Exception {
-    Building building = new Building("building_name","building_address", 1, 1);
+    Building building = new Building("building_name","building_address", 1);
     Building needBuilding = buildingService.saveBuilding(building);
 
     mvc.perform(
@@ -148,7 +142,7 @@ public class RestTest {
   @Test
   public void testPostExistingBuilding() throws Exception {
     Building building = new Building("building_name","building_address",
-        1, 1);
+        1);
 
     mvc.perform(
         post("/building")
@@ -174,7 +168,7 @@ public class RestTest {
   @Test
   public void testWrongDataPostBuilding() throws Exception {
     Building building = new Building("building_name","building_address",
-        -1, -1);
+        -1);
 
     MvcResult mvcResult =
         mvc.perform(
@@ -191,14 +185,14 @@ public class RestTest {
       messages.append(error.getMessage());
       messages.append(".");
     }
-    assertThat("Number of the units must be greater than 0 or equal 0.").isSubstringOf(messages.toString());
-    assertThat("Number of residents must be greater than 0 or equal 0.").isSubstringOf(messages.toString());
+    assertThat("Number of residents must be greater than 0 or equal 0.").
+        isSubstringOf(messages.toString());
   }
 
   @Test
-  public void testWrongDataUpdate() throws Exception {
+  public void testWrongDataPut() throws Exception {
     Building building = new Building("building_name","building_address",
-        10, 10);
+        10);
 
     building = buildingService.saveBuilding(building);
 
@@ -231,7 +225,7 @@ public class RestTest {
     byte[] decodedString = Base64.getDecoder().decode(base64ImageInfo);
 
     Building building = new Building("building_name", "building_address", 1,
-        1, decodedString);
+         decodedString);
 
     MvcResult mvcResult =
         mvc.perform(
@@ -254,7 +248,7 @@ public class RestTest {
   }
 
   private void createBuilding(String name) {
-    Building building = new Building(name, name, 1, 1);
+    Building building = new Building(name, name, 1);
     buildingService.saveBuilding(building);
   }
 

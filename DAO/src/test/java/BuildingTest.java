@@ -24,7 +24,7 @@ public class BuildingTest {
 
   @Test
   public void testFindByName() {
-    Building building = new Building("first", "last", 1, 1);
+    Building building = new Building("first", "last", 1);
     buildingRepository.save(building);
 
     Building findByName = buildingRepository.findByName(building.getName());
@@ -34,7 +34,7 @@ public class BuildingTest {
 
   @Test
   public void testFindByID() {
-    Building building = new Building("second", "second", 1, 1);
+    Building building = new Building("second", "second", 1);
     buildingRepository.save(building);
 
     Building findByID = buildingRepository.findOne(101L);
@@ -44,7 +44,7 @@ public class BuildingTest {
 
   @Test
   public void testDeleteByID() {
-    Building building = new Building("third", "third", 3, 3);
+    Building building = new Building("third", "third", 3);
     building = buildingRepository.save(building);
     long idBuilding = building.getId();
     buildingRepository.delete(idBuilding);
@@ -55,7 +55,7 @@ public class BuildingTest {
 
   @Test
   public void testCountEntity() {
-    Building building = new Building("fourth", "fourth", 4, 4);
+    Building building = new Building("fourth", "fourth", 4);
     buildingRepository.save(building);
     long countEntity = buildingRepository.count();
 

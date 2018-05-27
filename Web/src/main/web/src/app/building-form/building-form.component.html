@@ -2,7 +2,7 @@
   <div *ngIf="(isValidId && typePage === 'update') || (typePage === ''); else noBuilding">
     <div class="row block-message">
       <div class="col-md-6 offset-md-3 message">
-        <p *ngIf="errors[4].message !== ''" class="message" [ngClass]="[styleForMessage]">{{ errors[4].message }}</p>
+        <p *ngIf="errors[3].message !== ''" class="message" [ngClass]="[styleForMessage]">{{ errors[3].message }}</p>
         <p *ngIf="resultMessage !== ''" class="message" [ngClass]="[styleForMessage]">{{ resultMessage }}</p>
       </div>
     </div>
@@ -38,21 +38,11 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-2 col-form-label" for="numberUnits">Number of units in the building:</label>
-            <div class="col-md-10">
-              <input class="form-control" id="numberUnits" type="text" name="numberUnits" [(ngModel)]="numberUnits"/>
-              <div class="invalid-feedback" style="display: block;">
-                {{ errors[2].message }}
-              </div>
-            </div>
-
-          </div>
-          <div class="form-group row">
             <label class="col-md-2 col-form-label" for="numberResidents">Number of residents in the building:</label>
             <div class="col-md-10">
               <input class="form-control" id="numberResidents" type="text" name="numberResidents" [(ngModel)]="numberResidents"/>
               <div class="invalid-feedback" style="display: block;">
-                {{ errors[3].message }}
+                {{ errors[2].message }}
               </div>
             </div>
           </div>

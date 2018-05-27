@@ -95,10 +95,10 @@ public class BuildingController {
   @DeleteMapping("/building/{id}")
   @CrossOrigin(origins = "http://localhost:4200")
   public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
-    logger.info("Fetching & Deleting User with id {}", id);
+    logger.info("Fetching & Deleting Building with id {}", id);
 
-    Building user = buildingService.findById(id);
-    if (user == null) {
+    Building building = buildingService.findById(id);
+    if (building == null) {
       logger.error("Unable to delete. Building with id {} not found.", id);
       ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, String.format("Unable to delete building. Building with "
       + "id %d not found",id));

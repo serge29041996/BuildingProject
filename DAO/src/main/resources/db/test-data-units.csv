@@ -1,4 +1,4 @@
-id,number,numberBedrooms,areaApartment,availabilityFurniture,containAnimals,idBuilding
+id,number,numberBedrooms,areaApartment,furnitureAvailable,animalsAllowed,idBuilding
 1,1,2,60,true,true,1
 2,2,1,30,true,false,1
 3,3,3,90,false,false,2

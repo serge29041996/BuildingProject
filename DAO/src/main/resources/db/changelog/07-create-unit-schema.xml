@@ -12,10 +12,17 @@
             <column name="number" type="int"/>
             <column name="numberBedrooms" type="int"/>
             <column name="areaApartment" type="int"/>
-            <column name="availabilityFurniture" type="boolean"/>
-            <column name="containAnimals" type="boolean"/>
+            <column name="furnitureAvailable" type="boolean"/>
+            <column name="animalsAllowed" type="boolean"/>
             <column name="idBuilding" type="bigint"/>
         </createTable>
         <addAutoIncrement tableName="Unit" columnDataType="bigint" columnName="id" startWith="100" incrementBy="1"/>
+        <addForeignKeyConstraint baseTableName="Unit"
+                                 baseColumnNames="idBuilding"
+                                 constraintName="unit_bld_fk"
+                                 referencedTableName="Building"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
     </changeSet>
 </databaseChangeLog>

@@ -13,7 +13,6 @@ export class BuildingFormComponent implements OnInit {
   @ViewChild('f') signupForm: NgForm;
   name = '';
   address = '';
-  numberUnits = '';
   numberResidents = '';
   image: string = null;
   typeImage: string = null;
@@ -33,10 +32,6 @@ export class BuildingFormComponent implements OnInit {
     },
     {
       field: 'address',
-      message: ''
-    },
-    {
-      field: 'numberUnits',
       message: ''
     },
     {
@@ -69,7 +64,6 @@ export class BuildingFormComponent implements OnInit {
             this.idUpdatedBuilding = data.id;
             this.name = data.name;
             this.address = data.address;
-            this.numberUnits = '' + data.numberUnits;
             this.numberResidents = '' + data.numberResidents;
             this.image = data.image;
             this.typeImage = data.typeImage;
@@ -128,25 +122,16 @@ export class BuildingFormComponent implements OnInit {
 
   addBuilding(){
     if(this.typePage === '') {
-      let numberUnits: number;
       let numberResidents: number;
       let isHaveError = false;
 
-      if(!this.isNumber(this.numberUnits)){
-        this.errors[2].message = 'Invalid value. Number of units is a number';
-        isHaveError = true;
-      }
-      else{
-        numberUnits = parseInt(this.numberUnits);
-        this.errors[2].message = '';
-      }
       if (!this.isNumber(this.numberResidents)) {
-        this.errors[3].message = 'Invalid value. Number of residents is a number';
+        this.errors[2].message = 'Invalid value. Number of residents is a number';
         isHaveError = true;
       }
       else {
         numberResidents = parseInt(this.numberResidents);
-        this.errors[3].message = '';
+        this.errors[2].message = '';
       }
 
       if(this.name !== '' && this.address !==''){
@@ -165,28 +150,26 @@ export class BuildingFormComponent implements OnInit {
       }
 
       if(!isHaveError){
-        let building = new Building(this.name,this.address,numberUnits,numberResidents,this.image,this.typeImage);
+        let building = new Building(this.name,this.address,0,numberResidents,this.image,this.typeImage);
         this.buildingService.addBuilding(building).subscribe(
           (data: any) => {
             this.name = '';
             this.address = '';
-            this.numberUnits = '';
             this.numberResidents = '';
             this.image = null;
             this.typeImage = null;
-            this.errors[4].message = '';
+            this.errors[3].message = '';
             this.resultMessage = 'The information about building has saved.';
             this.outputMessage();
             this.signupForm.resetForm();
           },
           (error) => {
-            console.log(error);
             if(error.subErrors === null){
-              this.errors[4].message = error.message;
+              this.errors[3].message = error.message;
               this.outputMessage();
             }
             else if(error.subErrors.length === 0){
-              this.errors[4].message = error.message;
+              this.errors[3].message = error.message;
               this.outputMessage();
             }
             else{
@@ -198,23 +181,15 @@ export class BuildingFormComponent implements OnInit {
     }
     else {
       if(!this.signupForm.touched) {
-        this.errors[4].message = 'The information has not changed';
+        this.errors[3].message = 'The information has not changed';
         this.outputMessage();
       } else {
         let numberUnits: number;
         let numberResidents: number;
         let isHaveError = false;
 
-        if(!this.isNumber(this.numberUnits)){
-          this.errors[2].message = 'Invalid value. Number of units is a number';
-          isHaveError = true;
-        }
-        else{
-          numberUnits = parseInt(this.numberUnits);
-          this.errors[2].message = '';
-        }
         if (!this.isNumber(this.numberResidents)) {
-          this.errors[3].message = 'Invalid value. Number of residents is a number';
+          this.errors[2].message = 'Invalid value. Number of residents is a number';
           isHaveError = true;
         }
         else {
@@ -244,18 +219,18 @@ export class BuildingFormComponent implements OnInit {
             building.id = this.idUpdatedBuilding;
             this.buildingService.updateBuilding(building).subscribe(
               (data: any) => {
-                this.errors[4].message = '';
+                this.errors[3].message = '';
                 this.resultMessage = 'The information about building has updated.';
                 this.outputMessage();
               },
               (error) => {
                 console.log(error);
                 if(error.subErrors === null){
-                  this.errors[4].message = error.message;
+                  this.errors[3].message = error.message;
                   this.outputMessage();
                 }
                 else if(error.subErrors.length === 0){
-                  this.errors[4].message = error.message;
+                  this.errors[3].message = error.message;
                   this.outputMessage();
                 }
                 else{

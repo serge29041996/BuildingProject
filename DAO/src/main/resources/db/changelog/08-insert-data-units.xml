@@ -9,8 +9,8 @@
             <column header="number" name="number" type="numeric"/>
             <column header="numberBedrooms" name="numberBedrooms" type="numeric"/>
             <column header="areaApartment" name="areaApartment" type="numeric"/>
-            <column header="availabilityFurniture" name="availabilityFurniture" type="boolean"/>
-            <column header="containAnimals" name="containAnimals" type="boolean"/>
+            <column header="furnitureAvailable" name="furnitureAvailable" type="boolean"/>
+            <column header="animalsAllowed" name="animalsAllowed" type="boolean"/>
             <column header="idBuilding" name="idBuilding" type="numeric"/>
         </loadData>
     </changeSet>
