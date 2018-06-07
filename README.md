@@ -6,11 +6,11 @@ This project have modules:
 - Rest;
 - Web (UI for the project).
 
-This project created with using:
+Technologies used:
 - Java 8;
 - Spring Boot;
 - Spring Data;
 - Spring Test;
 - Swagger;
 - Liquibase;
-- Angualar 5.
+- Angular 5.
