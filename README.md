@@ -1,5 +1,5 @@
 # BuildingProject is project for managing data about Building and Units.
-This project are created with Spring Boot and have modules:
+This project have modules:
 - Common;
 - DAO;
 - Service;
