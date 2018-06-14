@@ -1,7 +1,6 @@
 package com.buildingproject.service;
 
 import com.buildingproject.commons.Building;
-import com.buildingproject.commons.Unit;
 import com.buildingproject.dao.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +15,7 @@ public class BuildingService implements IBuildingService {
 
   @Override
   public List<Building> findAll() {
-    List<Building> buildings =  buildingRepository.findAll();
-    for (Building building : buildings) {
-      building.setNumberUnits(0);
-    }
-    return buildings;
+    return buildingRepository.findAll();
   }
 
   @Override
@@ -35,11 +30,7 @@ public class BuildingService implements IBuildingService {
 
   @Override
   public Building findById(long id) {
-    if(id >= 0) {
-      return buildingRepository.findById(id);
-    } else {
-      return null;
-    }
+    return buildingRepository.findById(id);
   }
 
   @Override
@@ -66,7 +57,6 @@ public class BuildingService implements IBuildingService {
   public void updateBuilding(Building newBuilding, Building oldBuilding) {
     oldBuilding.setName(newBuilding.getName());
     oldBuilding.setAddress(newBuilding.getAddress());
-    //qoldBuilding.setNumberUnits(newBuilding.getNumberUnits());
     oldBuilding.setNumberResidents(newBuilding.getNumberResidents());
     oldBuilding.setImage(newBuilding.getImage());
     oldBuilding.setTypeImage(newBuilding.getTypeImage());
@@ -74,21 +64,8 @@ public class BuildingService implements IBuildingService {
   }
 
   @Override
-  public void deleteBuildingById(long id) {
-    Building needDeleteBuilding = findById(id);
-    if (needDeleteBuilding != null) {
-      buildingRepository.delete(needDeleteBuilding);
-    }
-  }
-
-  @Override
-  public List<Unit> getAllUnitsOfBuilding(long id) {
-    Building building = findById(id);
-    if(building != null) {
-      return building.getUnits();
-    } else {
-      return null;
-    }
+  public void deleteBuilding(Building building) {
+      buildingRepository.delete(building);
   }
 
   @Override

@@ -1,9 +1,12 @@
 package com.buildingproject.service;
 
+import com.buildingproject.commons.Building;
 import com.buildingproject.commons.Unit;
 import com.buildingproject.dao.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UnitService implements IUnitService{
@@ -19,9 +22,10 @@ public class UnitService implements IUnitService{
   }
 
   @Override
-  public Unit saveUnit(Unit unit) {
-    buildingService.addUnitToTheBuilding(unit.getBuilding());
-    return unitRepository.save(unit);
+  public Unit saveUnit(Unit unit, Building currentBuilding) {
+      unit.setBuilding(currentBuilding);
+      buildingService.addUnitToTheBuilding(unit.getBuilding());
+      return unitRepository.save(unit);
   }
 
   @Override
@@ -35,12 +39,9 @@ public class UnitService implements IUnitService{
   }
 
   @Override
-  public void deleteUnitById(long id) {
-    if(id > 0) {
-      Unit unit = findById(id);
-      buildingService.deleteUnitFromTheBuilding(unit.getBuilding());
-      unitRepository.delete(id);
-    }
+  public void deleteUnit(Unit unit) {
+    buildingService.deleteUnitFromTheBuilding(unit.getBuilding());
+    unitRepository.delete(unit.getId());
   }
 
   @Override
@@ -49,8 +50,12 @@ public class UnitService implements IUnitService{
   }
 
   @Override
-  public boolean isUnitExistInBuilding(Unit unit) {
-    // need think about equals for the unit
-    return false;
+  public boolean isUnitExistInBuilding(Unit unit, Building building) {
+      return unitRepository.findByNumberAndBuilding(unit.getNumber(), building) != null;
+  }
+
+  @Override
+  public List<Unit> findUnitsByBuilding(Building building) {
+      return unitRepository.findByBuilding(building);
   }
 }

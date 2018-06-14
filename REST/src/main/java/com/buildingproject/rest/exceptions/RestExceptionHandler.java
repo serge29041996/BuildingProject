@@ -1,4 +1,4 @@
-package com.buildingproject.rest;
+package com.buildingproject.rest.exceptions;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.core.Ordered;

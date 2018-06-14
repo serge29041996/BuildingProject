@@ -1,4 +1,4 @@
-package com.buildingproject.rest;
+package com.buildingproject.rest.exceptions;
 
 import lombok.Data;
 

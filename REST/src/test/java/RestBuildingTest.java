@@ -1,6 +1,6 @@
 import com.buildingproject.commons.Building;
-import com.buildingproject.rest.ApiError;
-import com.buildingproject.rest.ApiValidationError;
+import com.buildingproject.rest.exceptions.ApiError;
+import com.buildingproject.rest.exceptions.ApiValidationError;
 import com.buildingproject.rest.RestSpringClass;
 import com.buildingproject.service.IBuildingService;
 import com.fasterxml.jackson.databind.ObjectMapper;

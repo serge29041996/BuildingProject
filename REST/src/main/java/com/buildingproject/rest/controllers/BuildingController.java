@@ -1,6 +1,8 @@
-package com.buildingproject.rest;
+package com.buildingproject.rest.controllers;
 
 import com.buildingproject.commons.Building;
+import com.buildingproject.rest.RestSpringClass;
+import com.buildingproject.rest.exceptions.ApiError;
 import com.buildingproject.service.IBuildingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,7 +47,7 @@ public class BuildingController {
     logger.info("Fetching Building with id {}", id);
     Building building = buildingService.findById(id);
     if (building == null) {
-      logger.error("Building with name {} not found.", id);
+      logger.error("Building with id {} not found.", id);
       ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,String.format("Building with id %d not found", id));
       return new ResponseEntity<>(apiError, apiError.getStatus());
     }
@@ -104,7 +106,7 @@ public class BuildingController {
       + "id %d not found",id));
       return new ResponseEntity<>(apiError, apiError.getStatus());
     }
-    buildingService.deleteBuildingById(id);
+    buildingService.deleteBuilding(building);
     return new ResponseEntity<Building>(HttpStatus.OK);
   }
 }

@@ -12,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,11 +31,10 @@ public class UnitTest {
   @Test
   public void testFindByNumberAndBuilding() {
     Building building = new Building("building_name", "building_address", 10);
-    buildingRepository.save(building);
+    building = buildingRepository.save(building);
     Unit unit = new Unit(1,2,40, true,true,
                           building);
-    unitRepository.save(unit);
-    // After saving unit this unit will be add to the building list, but we cannot compare units
+    unit = unitRepository.save(unit);
 
     Unit needUnit = unitRepository.findByNumberAndBuilding(1, building);
 
@@ -44,19 +42,18 @@ public class UnitTest {
   }
 
   @Test
-  public void testFindByBuilding() {
+  public void testFindUnitsByBuilding() {
     Building building = new Building("1", "1",  10);
-    List<Unit> units = new ArrayList<>();
-    units.add(new Unit(1,2,60,true,true,
-                        building));
-    units.add(new Unit(2,1,30,false,false,
-                        building));
-    units.add(new Unit(3,3,90,true,false,
-                        building));
-
-    building.setUnits(units);
-    buildingRepository.save(building);
-    // After saving all units also saved to the database
+    building = buildingRepository.save(building);
+    Unit unit1 = new Unit(1,2,60,true,true,
+        building);
+    Unit unit2 = new Unit(2,1,30,false,false,
+        building);
+    Unit unit3 = new Unit(3,3,90,true,false,
+        building);
+    unitRepository.save(unit1);
+    unitRepository.save(unit2);
+    unitRepository.save(unit3);
 
     List<Unit> unitsOfBuilding = unitRepository.findByBuilding(building);
 
@@ -64,44 +61,43 @@ public class UnitTest {
   }
 
   @Test
-  public void testUnitsInBuilding() {
-    Building building = new Building("2", "2",  2);
+  public void testUpdateUnit() {
+    Building building = new Building("3", "3",  20);
+    building = buildingRepository.save(building);
     Unit unit1 = new Unit(1,2,60,true,true,
-                           building);
-    Unit unit2 = new Unit(2,1,30,false,false,
-                           building);
-    Unit unit3 = new Unit(3,3,90,true,false,
-                          building);
+        building);
 
-    buildingRepository.save(building);
+    unit1 = unitRepository.save(unit1);
+    unit1.setNumber(10);
     unitRepository.save(unit1);
-    unitRepository.save(unit2);
-    unitRepository.save(unit3);
 
-    Building needBuilding = buildingRepository.findByName("2");
+    Unit needUnit = unitRepository.findById(unit1.getId());
 
-    assertThat(needBuilding.getUnits().size()).isEqualTo(3);
+    assertThat(needUnit.getNumber()).isEqualTo(unit1.getNumber());
+
+    List<Unit> units = unitRepository.findByBuilding(building);
+
+    assertThat(units.size()).isEqualTo(1);
   }
 
   @Test
   public void testCascadeDelete() {
     Building building = new Building("3", "3",  3);
+    building = buildingRepository.save(building);
     Unit unit1 = new Unit(1,2,60,true,true,
         building);
     Unit unit2 = new Unit(2,1,30,false,false,
         building);
     Unit unit3 = new Unit(3,3,90,true,false,
         building);
-    List<Unit> units = new ArrayList<>();
-    units.add(unit1);
-    units.add(unit2);
-    units.add(unit3);
-    building.setUnits(units);
-    Building needBuilding = buildingRepository.save(building);
 
-    buildingRepository.delete(needBuilding.getId());
+    unitRepository.save(unit1);
+    unitRepository.save(unit2);
+    unitRepository.save(unit3);
 
-    List<Unit> unitsOfBuilding = unitRepository.findByBuilding(needBuilding);
+    buildingRepository.delete(building.getId());
+
+    List<Unit> unitsOfBuilding = unitRepository.findByBuilding(building);
 
     assertThat(unitsOfBuilding.size()).isEqualTo(0);
   }
@@ -109,31 +105,29 @@ public class UnitTest {
   @Test
   public void testUnitDelete() {
     Building building = new Building("4", "4",  4);
+    building = buildingRepository.save(building);
     Unit unit1 = new Unit(1,2,60,true,true,
         building);
     Unit unit2 = new Unit(2,1,30,false,false,
         building);
     Unit unit3 = new Unit(3,3,90,true,false,
         building);
-    List<Unit> units = new ArrayList<>();
-    units.add(unit1);
-    units.add(unit2);
-    units.add(unit3);
-    building.setUnits(units);
-    Building needBuilding = buildingRepository.save(building);
 
-    Unit needUnit = unitRepository.findByNumberAndBuilding(2, needBuilding);
+    unitRepository.save(unit1);
+    unitRepository.save(unit2);
+    unitRepository.save(unit3);
 
-    Building compareBuilding = buildingRepository.findById(needBuilding.getId());
+    Unit needUnit = unitRepository.findByNumberAndBuilding(2, building);
 
-    // this will not delete Unit from database
     unitRepository.delete(needUnit);
 
-    //buildingRepository.flush();
+    needUnit = unitRepository.findById(needUnit.getId());
 
-    assertThat(needBuilding).isEqualTo(compareBuilding);
+    assertThat(needUnit).isNull();
 
-    assertThat(needBuilding.getUnits().contains(needUnit)).isEqualTo(true);
+    List<Unit> unitsOfBuilding = unitRepository.findByBuilding(building);
+
+    assertThat(unitsOfBuilding.size()).isEqualTo(2);
   }
 
   @After

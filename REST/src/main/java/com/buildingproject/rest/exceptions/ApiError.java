@@ -1,4 +1,4 @@
-package com.buildingproject.rest;
+package com.buildingproject.rest.exceptions;
 
 import lombok.Data;
 import org.hibernate.validator.internal.engine.path.PathImpl;
@@ -21,25 +21,25 @@ public class ApiError {
   private ApiError() {
   }
 
-  ApiError(HttpStatus status) {
+  public ApiError(HttpStatus status) {
     this();
     this.status = status;
   }
 
-  ApiError(HttpStatus status, String message) {
+  public ApiError(HttpStatus status, String message) {
     this();
     this.status = status;
     this.message = message;
   }
 
-  ApiError(HttpStatus status, Throwable ex) {
+  public ApiError(HttpStatus status, Throwable ex) {
     this();
     this.status = status;
     this.message = "Unexpected error";
     this.debugMessage = ex.getLocalizedMessage();
   }
 
-  ApiError(HttpStatus status, String message, Throwable ex) {
+  public ApiError(HttpStatus status, String message, Throwable ex) {
     this();
     this.status = status;
     this.message = message;
@@ -95,32 +95,4 @@ public class ApiError {
   void addValidationErrors(Set<ConstraintViolation<?>> constraintViolations) {
     constraintViolations.forEach(this::addValidationError);
   }
-
-
-
-  /*
-  abstract class ApiSubError {
-
-  }
-
-  @Data
-  class ApiValidationError extends ApiSubError {
-    private String object;
-    private String field;
-    private Object rejectedValue;
-    private String message;
-
-    ApiValidationError(String object, String message) {
-      this.object = object;
-      this.message = message;
-    }
-
-    ApiValidationError(String object, String field, Object rejectedValue, String message) {
-      this.object = object;
-      this.field = field;
-      this.rejectedValue = rejectedValue;
-      this.message = message;
-    }
-  }
-  */
 }

@@ -1,7 +1,6 @@
 package com.buildingproject.service;
 
 import com.buildingproject.commons.Building;
-import com.buildingproject.commons.Unit;
 
 import java.util.List;
 
@@ -22,11 +21,9 @@ public interface IBuildingService {
 
   void updateBuilding(Building newBuilding, Building oldBuilding);
 
-  void deleteBuildingById(long id);
+  void deleteBuilding(Building building);
 
   Building findByNameAndAddress(String name, String address);
-
-  List<Unit> getAllUnitsOfBuilding(long id);
 
   void addUnitToTheBuilding(Building building);
 
