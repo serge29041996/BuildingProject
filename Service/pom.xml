@@ -15,6 +15,10 @@
     <dependencies>
         <dependency>
             <groupId>com.BuildingProject</groupId>
+            <artifactId>Commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.BuildingProject</groupId>
             <artifactId>DAO</artifactId>
         </dependency>
     </dependencies>

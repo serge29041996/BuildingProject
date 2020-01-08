@@ -72,13 +72,15 @@ public class BuildingService implements IBuildingService {
   public void addUnitToTheBuilding(Building building) {
     int numberUnits = building.getNumberUnits();
     building.setNumberUnits(numberUnits + 1);
-    buildingRepository.flush();
+    buildingRepository.save(building);
+    // buildingRepository.flush();
   }
 
   @Override
   public void deleteUnitFromTheBuilding(Building building) {
     int numberUnits = building.getNumberUnits();
     building.setNumberUnits(numberUnits - 1);
-    buildingRepository.flush();
+    buildingRepository.save(building);
+    // buildingRepository.flush();
   }
 }

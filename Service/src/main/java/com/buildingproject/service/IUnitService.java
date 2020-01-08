@@ -10,7 +10,7 @@ public interface IUnitService {
 
   List<Unit> findUnitsByBuilding(Building building);
 
-  Unit saveUnit(Unit unit, Building buildingId);
+  Unit saveUnit(Unit unit, Building building);
 
   void updateUnit(Unit newUnit, Unit oldUnit);
 

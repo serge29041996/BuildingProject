@@ -41,7 +41,7 @@ public class UnitService implements IUnitService{
   @Override
   public void deleteUnit(Unit unit) {
     buildingService.deleteUnitFromTheBuilding(unit.getBuilding());
-    unitRepository.delete(unit.getId());
+    unitRepository.delete(unit);
   }
 
   @Override

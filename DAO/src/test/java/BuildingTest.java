@@ -1,7 +1,7 @@
 import com.buildingproject.commons.Building;
 import com.buildingproject.dao.BuildingRepository;
 import com.buildingproject.dao.DaoSpringClass;
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public class BuildingTest {
     assertThat(countEntity).isEqualTo(1);
   }
 
-  @After
+  @Before
   public void deleteAllBuilding() {
     buildingRepository.deleteAll();
   }

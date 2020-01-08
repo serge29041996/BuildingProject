@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Building } from "../building";
 import { HttpHeaders } from "@angular/common/http";
-import {catchError} from "rxjs/operators/catchError";
+import { catchError } from "rxjs/operators/catchError";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorObservable} from "rxjs/observable/ErrorObservable";
 

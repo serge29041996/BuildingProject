@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -29,12 +30,12 @@ public class UnitController {
   private IUnitService unitService;
 
   @Autowired
-  IBuildingService buildingService;
+  private IBuildingService buildingService;
 
   @ApiOperation(value = "Add a unit to the building")
   @PostMapping("/unit/{buildingId}")
   @CrossOrigin(origins = "http://localhost:4200")
-  public ResponseEntity<?> createUser(@PathVariable("buildingId") long buildingId,
+  public ResponseEntity<?> createUnit(@PathVariable("buildingId") long buildingId,
                                       @RequestBody @Valid Unit unit, UriComponentsBuilder ucBuilder) {
     logger.info("Creating Unit : {}", unit);
 
@@ -64,7 +65,7 @@ public class UnitController {
   @ApiOperation(value = "Update unit with an ID")
   @PutMapping("/unit/{id}")
   @CrossOrigin(origins = "http://localhost:4200")
-  public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody @Valid Unit updatedUnit) {
+  public ResponseEntity<?> updateUnit(@PathVariable("id") long id, @RequestBody @Valid Unit updatedUnit) {
     logger.info("Updating Unit with id {}", id);
 
     Unit currentUnit = unitService.findById(id);
@@ -83,7 +84,7 @@ public class UnitController {
   @ApiOperation(value = "Delete unit with an ID")
   @DeleteMapping("/unit/{id}")
   @CrossOrigin(origins = "http://localhost:4200")
-  public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
+  public ResponseEntity<?> deleteUnit(@PathVariable("id") long id) {
     logger.info("Fetching & Deleting Unit with id {}", id);
 
     Unit unit = unitService.findById(id);
@@ -93,12 +94,13 @@ public class UnitController {
           + "id %d not found",id));
       return new ResponseEntity<>(apiError, apiError.getStatus());
     }
+
     unitService.deleteUnit(unit);
     return new ResponseEntity<Unit>(HttpStatus.OK);
   }
 
   @ApiOperation(value = "Get all units of building with ID")
-  @DeleteMapping("units/{buildingId}")
+  @GetMapping("units/{buildingId}")
   @CrossOrigin(origins = "http://localhost:4200")
   public ResponseEntity<?> getUnitsOfBuilding(@PathVariable("buildingId") long buildingId) {
     logger.info("Fetching Units from Building with id {}", buildingId);
@@ -112,7 +114,7 @@ public class UnitController {
       return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-    unitService.findUnitsByBuilding(building);
-    return new ResponseEntity<Unit>(HttpStatus.OK);
+    List<Unit> unitList = unitService.findUnitsByBuilding(building);
+    return new ResponseEntity<>(unitList, HttpStatus.OK);
   }
 }

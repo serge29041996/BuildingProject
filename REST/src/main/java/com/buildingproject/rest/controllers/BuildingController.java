@@ -43,7 +43,7 @@ public class BuildingController {
   @ApiOperation(value = "Search a building with an ID")
   @GetMapping("/building/{id}")
   @CrossOrigin(origins = "http://localhost:4200")
-  public ResponseEntity<?> getUser(@PathVariable long id){
+  public ResponseEntity<?> getBuilding(@PathVariable long id){
     logger.info("Fetching Building with id {}", id);
     Building building = buildingService.findById(id);
     if (building == null) {
@@ -57,7 +57,7 @@ public class BuildingController {
   @ApiOperation(value = "Add a building")
   @PostMapping("/building")
   @CrossOrigin(origins = "http://localhost:4200")
-  public ResponseEntity<?> createUser(@RequestBody @Valid Building building, UriComponentsBuilder ucBuilder) {
+  public ResponseEntity<?> createBuilding(@RequestBody @Valid Building building, UriComponentsBuilder ucBuilder) {
     logger.info("Creating Building : {}", building);
 
     if (buildingService.isBuildingExist(building)) {
@@ -77,7 +77,7 @@ public class BuildingController {
   @ApiOperation(value = "Update building with an ID")
   @PutMapping("/building/{id}")
   @CrossOrigin(origins = "http://localhost:4200")
-  public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody @Valid Building building) {
+  public ResponseEntity<?> updateBuilding(@PathVariable("id") long id, @RequestBody @Valid Building building) {
     logger.info("Updating Building with id {}", id);
 
     Building currentBuilding = buildingService.findById(id);
@@ -96,7 +96,7 @@ public class BuildingController {
   @ApiOperation(value = "Delete building with an ID")
   @DeleteMapping("/building/{id}")
   @CrossOrigin(origins = "http://localhost:4200")
-  public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
+  public ResponseEntity<?> deleteBuilding(@PathVariable("id") long id) {
     logger.info("Fetching & Deleting Building with id {}", id);
 
     Building building = buildingService.findById(id);
